@@ -58,8 +58,8 @@ public class ReaderActivity extends AppCompatActivity {
     private static final EPiccType PICC_TYPE = EPiccType.INTERNAL;
 
     // Cores do botão principal (ARGB)
-    private static final int COLOR_OPEN  = 0xFF43A047; // verde Abrir Mercado
-    private static final int COLOR_CLOSE = 0xFFE53935; // vermelho Fechar Mercado
+    private static final int COLOR_OPEN  = 0xFF43A047; // verde Abrir Loja
+    private static final int COLOR_CLOSE = 0xFFE53935; // vermelho Fechar Loja
 
     // Handler de logs do PICC (beep + impressão imediata)
     private final Handler piccHandler = new Handler(Looper.getMainLooper()) {
@@ -185,7 +185,7 @@ public class ReaderActivity extends AppCompatActivity {
     private void applyButtonsState() {
         if (btnStart != null) {
             boolean aberto = isAnyRunning();
-            btnStart.setText(aberto ? "Fechar Mercado" : "Abrir Mercado");
+            btnStart.setText(aberto ? R.string.reader_start_close : R.string.reader_start_open);
             // cor do fundo: verde quando fechado (para abrir), vermelho quando aberto (para fechar)
             try {
                 btnStart.setBackgroundColor(aberto ? COLOR_CLOSE : COLOR_OPEN);
@@ -439,7 +439,8 @@ public class ReaderActivity extends AppCompatActivity {
         try {
             IPrinter printer = NeptuneLiteUser.getInstance().getDal(getApplicationContext()).getPrinter();
             printer.init();
-            printer.printStr("\n\nObrigado por Comprar no Mercado da Bia. Volte Sempre! \n\n" + text + "\n\n", null);
+            String header = ReaderActivity.this.getString(R.string.reader_receipt_header);
+            printer.printStr("\n\n" + header + "\n\n" + text + "\n\n", null);
             int ret = printer.start();
             if (ret != 0) appendLine("Erro na impressão. Código: " + ret);
             else appendLine("Impressão concluída com sucesso.");
