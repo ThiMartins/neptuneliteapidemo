@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="@android:color/white">
+
+    <!-- Título -->
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Mercadinho da Bia"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
+        android:gravity="center"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="12dp" />
+
+    <!-- Botão principal -->
+    <Button
+        android:id="@+id/btn_start"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Iniciar Tudo"
+        android:textStyle="bold"
+        android:textAllCaps="false"
+        android:layout_below="@id/tv_title"
+        android:layout_marginBottom="8dp" />
+
+    <!-- Botão Calculadora (simples, para não interferir nas leituras) -->
+    <Button
+        android:id="@+id/btn_calc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Calculadora"
+        android:textAllCaps="false"
+        android:background="@android:color/holo_orange_light"
+        android:layout_below="@id/btn_start"
+        android:layout_marginBottom="8dp" />
+
+    <!-- Área de resultados com rolagem -->
+    <ScrollView
+        android:id="@+id/scroll_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/btn_calc"
+        android:layout_above="@+id/controls_footer"
+        android:fillViewport="true"
+        android:paddingTop="8dp">
+
+        <TextView
+            android:id="@+id/tv_result"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Resultado aparecerá aqui"
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
+            android:scrollbars="vertical"
+            android:padding="8dp"
+            android:lineSpacingExtra="2dp" />
+    </ScrollView>
+
+    <!-- Rodapé com Limpar, Print, Beep e DAL -->
+    <LinearLayout
+        android:id="@+id/controls_footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="end|center_vertical"
+        android:orientation="horizontal"
+        android:padding="8dp">
+
+        <!-- Botão Limpar -->
+        <Button
+            android:id="@+id/btn_clear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Limpar"
+            android:textSize="11sp"
+            android:padding="6dp"
+            android:layout_marginEnd="12dp"
+            android:background="@android:color/holo_blue_light"
+            android:textColor="@android:color/white" />
+
+        <!-- Toggle Print -->
+        <CheckBox
+            android:id="@+id/cb_print"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Print"
+            android:checked="false"
+            android:textColor="@android:color/black"
+            android:layout_marginEnd="12dp"
+            android:textSize="13sp"/>
+
+        <!-- Toggle Beep -->
+        <CheckBox
+            android:id="@+id/cb_beep"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Beep"
+            android:checked="true"
+            android:textColor="@android:color/black"
+            android:layout_marginEnd="12dp"
+            android:textSize="13sp"/>
+
+        <!-- Botão DAL (oculto, mantém compatibilidade) -->
+        <Button
+            android:visibility="gone"
+            android:id="@+id/btn_open_dal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="DAL"
+            android:textSize="11sp"
+            android:padding="6dp"
+            android:alpha="0.9"
+            android:background="@android:color/darker_gray"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+
+</RelativeLayout>
