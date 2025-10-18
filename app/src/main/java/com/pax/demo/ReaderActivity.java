@@ -72,6 +72,7 @@ public class ReaderActivity extends AppCompatActivity {
                 piccFirstLineSeen = true;
                 if (beepEnabled) {
                     beep();
+                    beep();
                 }
                 if (printEnabled && !piccPrintedThisCycle) {
                     piccPrintedThisCycle = true;
@@ -214,6 +215,7 @@ public class ReaderActivity extends AppCompatActivity {
                             appendLine(result);
                             if (beepEnabled) {
                                 beep();
+                                beep();
                             }
                             if (printEnabled) printSimple(result);
                             MagTester.getInstance().reset();
@@ -291,6 +293,7 @@ public class ReaderActivity extends AppCompatActivity {
 
                             appendLine(res);
                             if (beepEnabled) {
+                                beep();
                                 beep();
                             }
                             if (printEnabled) printSimple(res);
@@ -402,23 +405,9 @@ public class ReaderActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override public void run() {
                 try {
-                    for (int i = 0; i < 2; i++) {
-                        playTone(800 /*Hz*/, 250 /*ms*/);
-                        if (i == 0) {
-                            try {
-                                Thread.sleep(80);
-                            } catch (InterruptedException ie) {
-                                Thread.currentThread().interrupt();
-                                return;
-                            }
-                        }
-                    }
+                    playTone(800 /*Hz*/, 250 /*ms*/);
                 } catch (Exception e) {
-                    if (e instanceof InterruptedException) {
-                        Thread.currentThread().interrupt();
-                    } else {
-                        appendLine("Erro no beep: " + e.getMessage());
-                    }
+                    appendLine("Erro no beep: " + e.getMessage());
                 }
             }
         }, "BeepSuccessThread").start();
@@ -460,16 +449,7 @@ public class ReaderActivity extends AppCompatActivity {
             IPrinter printer = NeptuneLiteUser.getInstance().getDal(getApplicationContext()).getPrinter();
             printer.init();
             String header = ReaderActivity.this.getString(R.string.reader_receipt_header);
-            String asciiDog = ReaderActivity.this.getString(R.string.reader_receipt_ascii_dog);
-            StringBuilder builder = new StringBuilder();
-            builder.append("\n\n")
-                    .append(header)
-                    .append("\n")
-                    .append(asciiDog)
-                    .append("\n\n")
-                    .append(text)
-                    .append("\n\n");
-            printer.printStr(builder.toString(), null);
+            printer.printStr("\n\n" + header + "\n\n" + text + "\n\n", null);
             int ret = printer.start();
             if (ret != 0) appendLine("Erro na impressão. Código: " + ret);
             else appendLine("Impressão concluída com sucesso.");
