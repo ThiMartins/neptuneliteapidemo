@@ -70,7 +70,10 @@ public class ReaderActivity extends AppCompatActivity {
             // Beep e impressão imediatos na primeira saída do ciclo
             if (!piccFirstLineSeen) {
                 piccFirstLineSeen = true;
-                if (beepEnabled) beep();
+                if (beepEnabled) {
+                    beep();
+                    beep();
+                }
                 if (printEnabled && !piccPrintedThisCycle) {
                     piccPrintedThisCycle = true;
                     printSimple(line == null || line.length() == 0 ? "PICC: leitura iniciada." : line);
@@ -210,7 +213,10 @@ public class ReaderActivity extends AppCompatActivity {
                             TrackData data = MagTester.getInstance().read();
                             String result = buildMagResult(data);
                             appendLine(result);
-                            if (beepEnabled) beep();
+                            if (beepEnabled) {
+                                beep();
+                                beep();
+                            }
                             if (printEnabled) printSimple(result);
                             MagTester.getInstance().reset();
                         }
@@ -286,7 +292,10 @@ public class ReaderActivity extends AppCompatActivity {
                             } catch (Exception ignore) {}
 
                             appendLine(res);
-                            if (beepEnabled) beep();
+                            if (beepEnabled) {
+                                beep();
+                                beep();
+                            }
                             if (printEnabled) printSimple(res);
 
                             try { IccTester.getInstance().close((byte)0); } catch (Exception ignored) {}

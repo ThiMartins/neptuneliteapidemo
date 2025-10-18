@@ -23,8 +23,10 @@
         android:id="@+id/btn_start"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:minHeight="64dp"
         android:text="@string/reader_start_open"
         android:textStyle="bold"
+        android:textSize="18sp"
         android:textAllCaps="false"
         android:layout_below="@id/tv_title"
         android:layout_marginBottom="8dp" />
@@ -34,8 +36,10 @@
         android:id="@+id/btn_calc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:minHeight="64dp"
         android:text="Calculadora"
         android:textAllCaps="false"
+        android:textSize="18sp"
         android:background="@android:color/holo_orange_light"
         android:layout_below="@id/btn_start"
         android:layout_marginBottom="8dp" />
