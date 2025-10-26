@@ -17,10 +17,14 @@ import com.pax.demo.base.BaseFragment;
 
 public class ScanFragment extends BaseFragment implements OnClickListener {
 
+    public static final String ARG_AUTO_FRONT = "autoFront";
+
     private TextView resultTv;
     private EScannerType scannerType = EScannerType.REAR;
     private Button frontBt, rearBt, leftBt, rightBt;
     private EditText timeOutEt;
+    private boolean autoStartFront;
+    private boolean autoFrontQueued;
 
     private Handler handler = new Handler() {
         public void handleMessage(android.os.Message msg) {
@@ -39,6 +43,7 @@ public class ScanFragment extends BaseFragment implements OnClickListener {
         View view = inflater.inflate(R.layout.fragment_scanner_layout, container, false);
 
         scannerType = EScannerType.valueOf(getArguments().getString("scannerType"));
+        autoStartFront = getArguments().getBoolean(ARG_AUTO_FRONT, false);
 
         resultTv = (TextView) view.findViewById(R.id.fragment_scanner_result);
         frontBt = (Button) view.findViewById(R.id.fragment_scanner_front);
@@ -63,6 +68,8 @@ public class ScanFragment extends BaseFragment implements OnClickListener {
             leftBt.setOnClickListener(this);
             rightBt.setOnClickListener(this);
         }
+
+        maybeAutoFront(view);
 
         return view;
     }
@@ -117,5 +124,20 @@ public class ScanFragment extends BaseFragment implements OnClickListener {
             default:
                 break;
         }
+    }
+
+    private void maybeAutoFront(View root) {
+        if (!autoStartFront || scannerType == EScannerType.EXTERNAL || frontBt == null || autoFrontQueued) {
+            return;
+        }
+        autoFrontQueued = true;
+        root.post(new Runnable() {
+            @Override
+            public void run() {
+                if (frontBt != null) {
+                    frontBt.performClick();
+                }
+            }
+        });
     }
 }
