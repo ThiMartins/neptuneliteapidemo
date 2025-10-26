@@ -52,6 +52,16 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/app_name" />
 
+        <activity
+            android:name=".TextPadActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/text_pad_title"
+            android:parentActivityName=".ReaderActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.pax.demo.ReaderActivity" />
+        </activity>
+
         <!-- Extras do demo original -->
         <activity
             android:name=".modules.ped.JsonActivity"
