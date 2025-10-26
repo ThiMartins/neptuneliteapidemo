@@ -38,7 +38,7 @@ public class ReaderActivity extends AppCompatActivity {
 
     // UI
     private TextView tvResult;
-    private Button btnStart, btnDal, btnClear, btnCalc; // + btnCalc
+    private Button btnStart, btnDal, btnClear, btnCalc, btnText; // botões extras
     private CheckBox cbBeep, cbPrint;
     private ScrollView scrollView;
 
@@ -58,8 +58,8 @@ public class ReaderActivity extends AppCompatActivity {
     private static final EPiccType PICC_TYPE = EPiccType.INTERNAL;
 
     // Cores do botão principal (ARGB)
-    private static final int COLOR_OPEN  = 0xFF43A047; // verde Abrir Mercado
-    private static final int COLOR_CLOSE = 0xFFE53935; // vermelho Fechar Mercado
+    private static final int COLOR_OPEN  = 0xFF43A047; // verde Abrir Loja
+    private static final int COLOR_CLOSE = 0xFFE53935; // vermelho Fechar Loja
 
     // Handler de logs do PICC (beep + impressão imediata)
     private final Handler piccHandler = new Handler(Looper.getMainLooper()) {
@@ -70,7 +70,9 @@ public class ReaderActivity extends AppCompatActivity {
             // Beep e impressão imediatos na primeira saída do ciclo
             if (!piccFirstLineSeen) {
                 piccFirstLineSeen = true;
-                if (beepEnabled) beep();
+                if (beepEnabled) {
+                    beep();
+                }
                 if (printEnabled && !piccPrintedThisCycle) {
                     piccPrintedThisCycle = true;
                     printSimple(line == null || line.length() == 0 ? "PICC: leitura iniciada." : line);
@@ -114,6 +116,7 @@ public class ReaderActivity extends AppCompatActivity {
         btnDal     = (Button) findViewById(R.id.btn_open_dal);
         btnClear   = (Button) findViewById(R.id.btn_clear);
         btnCalc    = (Button) findViewById(R.id.btn_calc); // NEW
+        btnText    = (Button) findViewById(R.id.btn_text);
         cbBeep     = (CheckBox) findViewById(R.id.cb_beep);
         cbPrint    = (CheckBox) findViewById(R.id.cb_print);
         scrollView = (ScrollView) findViewById(R.id.scroll_container);
@@ -156,9 +159,22 @@ public class ReaderActivity extends AppCompatActivity {
             });
         }
 
+        if (btnText != null) {
+            btnText.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    openTextPad();
+                }
+            });
+        }
+
         clearLog();
         appendLine("Iniciando leituras MAG/ICC/PICC...");
         startAll();
+    }
+
+    private void openTextPad() {
+        Intent intent = new Intent(this, TextPadActivity.class);
+        startActivity(intent);
     }
 
     @Override protected void onPause() { super.onPause(); stopAll(); }
@@ -185,7 +201,7 @@ public class ReaderActivity extends AppCompatActivity {
     private void applyButtonsState() {
         if (btnStart != null) {
             boolean aberto = isAnyRunning();
-            btnStart.setText(aberto ? "Fechar Mercado" : "Abrir Mercado");
+            btnStart.setText(aberto ? R.string.reader_start_close : R.string.reader_start_open);
             // cor do fundo: verde quando fechado (para abrir), vermelho quando aberto (para fechar)
             try {
                 btnStart.setBackgroundColor(aberto ? COLOR_CLOSE : COLOR_OPEN);
@@ -210,7 +226,9 @@ public class ReaderActivity extends AppCompatActivity {
                             TrackData data = MagTester.getInstance().read();
                             String result = buildMagResult(data);
                             appendLine(result);
-                            if (beepEnabled) beep();
+                            if (beepEnabled) {
+                                beep();
+                            }
                             if (printEnabled) printSimple(result);
                             MagTester.getInstance().reset();
                         }
@@ -286,7 +304,9 @@ public class ReaderActivity extends AppCompatActivity {
                             } catch (Exception ignore) {}
 
                             appendLine(res);
-                            if (beepEnabled) beep();
+                            if (beepEnabled) {
+                                beep();
+                            }
                             if (printEnabled) printSimple(res);
 
                             try { IccTester.getInstance().close((byte)0); } catch (Exception ignored) {}
@@ -396,9 +416,23 @@ public class ReaderActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override public void run() {
                 try {
-                    playTone(800 /*Hz*/, 250 /*ms*/);
+                    for (int i = 0; i < 2; i++) {
+                        playTone(800 /*Hz*/, 250 /*ms*/);
+                        if (i == 0) {
+                            try {
+                                Thread.sleep(80);
+                            } catch (InterruptedException ie) {
+                                Thread.currentThread().interrupt();
+                                return;
+                            }
+                        }
+                    }
                 } catch (Exception e) {
-                    appendLine("Erro no beep: " + e.getMessage());
+                    if (e instanceof InterruptedException) {
+                        Thread.currentThread().interrupt();
+                    } else {
+                        appendLine("Erro no beep: " + e.getMessage());
+                    }
                 }
             }
         }, "BeepSuccessThread").start();
@@ -439,7 +473,17 @@ public class ReaderActivity extends AppCompatActivity {
         try {
             IPrinter printer = NeptuneLiteUser.getInstance().getDal(getApplicationContext()).getPrinter();
             printer.init();
-            printer.printStr("\n\nObrigado por Comprar no Mercado da Bia. Volte Sempre! \n\n" + text + "\n\n", null);
+            String header = ReaderActivity.this.getString(R.string.reader_receipt_header);
+            String asciiDog = ReaderActivity.this.getString(R.string.reader_receipt_ascii_dog);
+            StringBuilder builder = new StringBuilder();
+            builder.append("\n\n")
+                    .append(header)
+                    .append("\n")
+                    .append(asciiDog)
+                    .append("\n\n")
+                    .append(text)
+                    .append("\n\n");
+            printer.printStr(builder.toString(), null);
             int ret = printer.start();
             if (ret != 0) appendLine("Erro na impressão. Código: " + ret);
             else appendLine("Impressão concluída com sucesso.");

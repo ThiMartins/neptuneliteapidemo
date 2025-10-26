@@ -10,7 +10,7 @@
         android:id="@+id/tv_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Mercadinho da Bia"
+        android:text="@string/reader_title"
         android:textSize="20sp"
         android:textStyle="bold"
         android:textColor="@android:color/black"
@@ -23,29 +23,53 @@
         android:id="@+id/btn_start"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Iniciar Tudo"
+        android:minHeight="72dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        android:text="@string/reader_start_open"
         android:textStyle="bold"
+        android:textSize="20sp"
         android:textAllCaps="false"
         android:layout_below="@id/tv_title"
-        android:layout_marginBottom="8dp" />
+        android:layout_marginBottom="12dp" />
 
     <!-- Botão Calculadora (simples, para não interferir nas leituras) -->
     <Button
         android:id="@+id/btn_calc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Calculadora"
+        android:minHeight="72dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        android:text="@string/reader_calc"
         android:textAllCaps="false"
+        android:textSize="20sp"
         android:background="@android:color/holo_orange_light"
         android:layout_below="@id/btn_start"
-        android:layout_marginBottom="8dp" />
+        android:layout_marginBottom="12dp" />
+
+    <!-- Botão para editor de texto em caixa ampliada -->
+    <Button
+        android:id="@+id/btn_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="72dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        android:text="@string/reader_text"
+        android:textAllCaps="false"
+        android:textSize="20sp"
+        android:background="@android:color/holo_blue_light"
+        android:textColor="@android:color/white"
+        android:layout_below="@id/btn_calc"
+        android:layout_marginBottom="12dp" />
 
     <!-- Área de resultados com rolagem -->
     <ScrollView
         android:id="@+id/scroll_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/btn_calc"
+        android:layout_below="@id/btn_text"
         android:layout_above="@+id/controls_footer"
         android:fillViewport="true"
         android:paddingTop="8dp">

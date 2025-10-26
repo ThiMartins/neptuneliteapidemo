@@ -45,6 +45,12 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".TextPadActivity"
+            android:label="@string/reader_text_title"
+            android:windowSoftInputMode="stateVisible|adjustResize"
+            android:screenOrientation="portrait" />
+
         <!-- 🧩 Teste do DAL (demo original) -->
         <activity
             android:name=".base.DALTestActivity"
