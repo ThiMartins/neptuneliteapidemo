@@ -1,7 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Mercadinho</string>
+    <string name="app_name">Loja</string>
+    <string name="reader_title">Loja da Bia</string>
+    <string name="reader_start_open">Abrir Loja</string>
+    <string name="reader_start_close">Fechar Loja</string>
+    <string name="reader_receipt_header">Obrigado por Comprar na Loja da Bia. Volte Sempre!</string>
+    <string name="reader_calc_label">Calculadora</string>
+    <string name="reader_text_pad_label">Texto</string>
+    <string name="reader_camera_label">Câmera</string>
+    <string name="text_pad_title">Texto em letras grandes</string>
+    <string name="text_pad_input_hint">Digite o texto desejado…</string>
+    <string name="text_pad_print_label">Imprimir (segure 3s)</string>
+    <string name="text_pad_print_hold_hint">Mantenha pressionado 3 segundos para imprimir.</string>
+    <string name="text_pad_print_empty">Digite um texto antes de imprimir.</string>
+    <string name="text_pad_print_success">Texto enviado para impressão.</string>
+    <string name="text_pad_print_failed_generic">Não foi possível imprimir o texto digitado.</string>
+    <string name="text_pad_print_status_error">Erro na impressão. Código: %1$d</string>
+    <string name="camera_title">Câmera</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
