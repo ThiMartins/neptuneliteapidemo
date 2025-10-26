@@ -38,7 +38,7 @@ public class ReaderActivity extends AppCompatActivity {
 
     // UI
     private TextView tvResult;
-    private Button btnStart, btnDal, btnClear, btnCalc; // + btnCalc
+    private Button btnStart, btnDal, btnClear, btnCalc, btnText;
     private CheckBox cbBeep, cbPrint;
     private ScrollView scrollView;
 
@@ -116,7 +116,8 @@ public class ReaderActivity extends AppCompatActivity {
         btnStart   = (Button) findViewById(R.id.btn_start);
         btnDal     = (Button) findViewById(R.id.btn_open_dal);
         btnClear   = (Button) findViewById(R.id.btn_clear);
-        btnCalc    = (Button) findViewById(R.id.btn_calc); // NEW
+        btnCalc    = (Button) findViewById(R.id.btn_calc);
+        btnText    = (Button) findViewById(R.id.btn_text);
         cbBeep     = (CheckBox) findViewById(R.id.cb_beep);
         cbPrint    = (CheckBox) findViewById(R.id.cb_print);
         scrollView = (ScrollView) findViewById(R.id.scroll_container);
@@ -155,6 +156,14 @@ public class ReaderActivity extends AppCompatActivity {
             btnCalc.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
                     openCalculator();
+                }
+            });
+        }
+
+        if (btnText != null) {
+            btnText.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    openTextPad();
                 }
             });
         }
@@ -516,5 +525,14 @@ public class ReaderActivity extends AppCompatActivity {
 
         // 3) Feedback leve no log
         appendLine("Não foi possível abrir a calculadora neste dispositivo.");
+    }
+
+    private void openTextPad() {
+        try {
+            Intent intent = new Intent(ReaderActivity.this, TextPadActivity.class);
+            startActivity(intent);
+        } catch (Throwable t) {
+            appendLine("Não foi possível abrir o bloco de texto.");
+        }
     }
 }

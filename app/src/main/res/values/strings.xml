@@ -6,6 +6,11 @@
     <string name="reader_start_open">Abrir Loja</string>
     <string name="reader_start_close">Fechar Loja</string>
     <string name="reader_receipt_header">Obrigado por Comprar na Loja da Bia. Volte Sempre!</string>
+    <string name="reader_calc_label">Calculadora</string>
+    <string name="reader_text_pad_label">Texto</string>
+    <string name="text_pad_title">Texto em letras grandes</string>
+    <string name="text_pad_preview_placeholder">As letras aparecem aqui</string>
+    <string name="text_pad_input_hint">Digite o texto desejado…</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
