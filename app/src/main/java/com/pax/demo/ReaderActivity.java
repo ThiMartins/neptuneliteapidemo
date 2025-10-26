@@ -38,7 +38,7 @@ public class ReaderActivity extends AppCompatActivity {
 
     // UI
     private TextView tvResult;
-    private Button btnStart, btnDal, btnClear, btnCalc; // + btnCalc
+    private Button btnStart, btnDal, btnClear, btnCalc, btnText, btnCamera;
     private CheckBox cbBeep, cbPrint;
     private ScrollView scrollView;
 
@@ -57,9 +57,11 @@ public class ReaderActivity extends AppCompatActivity {
     private volatile boolean piccPrintedThisCycle = false;
     private static final EPiccType PICC_TYPE = EPiccType.INTERNAL;
 
+    private static final boolean CAMERA_SHORTCUT_ENABLED = false;
+
     // Cores do botão principal (ARGB)
-    private static final int COLOR_OPEN  = 0xFF43A047; // verde Abrir Mercado
-    private static final int COLOR_CLOSE = 0xFFE53935; // vermelho Fechar Mercado
+    private static final int COLOR_OPEN  = 0xFF43A047; // verde Abrir Loja
+    private static final int COLOR_CLOSE = 0xFFE53935; // vermelho Fechar Loja
 
     // Handler de logs do PICC (beep + impressão imediata)
     private final Handler piccHandler = new Handler(Looper.getMainLooper()) {
@@ -70,7 +72,10 @@ public class ReaderActivity extends AppCompatActivity {
             // Beep e impressão imediatos na primeira saída do ciclo
             if (!piccFirstLineSeen) {
                 piccFirstLineSeen = true;
-                if (beepEnabled) beep();
+                if (beepEnabled) {
+                    beep();
+                    beep();
+                }
                 if (printEnabled && !piccPrintedThisCycle) {
                     piccPrintedThisCycle = true;
                     printSimple(line == null || line.length() == 0 ? "PICC: leitura iniciada." : line);
@@ -113,7 +118,9 @@ public class ReaderActivity extends AppCompatActivity {
         btnStart   = (Button) findViewById(R.id.btn_start);
         btnDal     = (Button) findViewById(R.id.btn_open_dal);
         btnClear   = (Button) findViewById(R.id.btn_clear);
-        btnCalc    = (Button) findViewById(R.id.btn_calc); // NEW
+        btnCalc    = (Button) findViewById(R.id.btn_calc);
+        btnText    = (Button) findViewById(R.id.btn_text);
+        btnCamera  = (Button) findViewById(R.id.btn_camera);
         cbBeep     = (CheckBox) findViewById(R.id.cb_beep);
         cbPrint    = (CheckBox) findViewById(R.id.cb_print);
         scrollView = (ScrollView) findViewById(R.id.scroll_container);
@@ -156,6 +163,26 @@ public class ReaderActivity extends AppCompatActivity {
             });
         }
 
+        if (btnText != null) {
+            btnText.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    openTextPad();
+                }
+            });
+        }
+
+        if (btnCamera != null) {
+            if (CAMERA_SHORTCUT_ENABLED) {
+                btnCamera.setOnClickListener(new View.OnClickListener() {
+                    @Override public void onClick(View v) {
+                        openCamera();
+                    }
+                });
+            } else {
+                btnCamera.setEnabled(false);
+            }
+        }
+
         clearLog();
         appendLine("Iniciando leituras MAG/ICC/PICC...");
         startAll();
@@ -185,7 +212,7 @@ public class ReaderActivity extends AppCompatActivity {
     private void applyButtonsState() {
         if (btnStart != null) {
             boolean aberto = isAnyRunning();
-            btnStart.setText(aberto ? "Fechar Mercado" : "Abrir Mercado");
+            btnStart.setText(aberto ? R.string.reader_start_close : R.string.reader_start_open);
             // cor do fundo: verde quando fechado (para abrir), vermelho quando aberto (para fechar)
             try {
                 btnStart.setBackgroundColor(aberto ? COLOR_CLOSE : COLOR_OPEN);
@@ -210,7 +237,10 @@ public class ReaderActivity extends AppCompatActivity {
                             TrackData data = MagTester.getInstance().read();
                             String result = buildMagResult(data);
                             appendLine(result);
-                            if (beepEnabled) beep();
+                            if (beepEnabled) {
+                                beep();
+                                beep();
+                            }
                             if (printEnabled) printSimple(result);
                             MagTester.getInstance().reset();
                         }
@@ -286,7 +316,10 @@ public class ReaderActivity extends AppCompatActivity {
                             } catch (Exception ignore) {}
 
                             appendLine(res);
-                            if (beepEnabled) beep();
+                            if (beepEnabled) {
+                                beep();
+                                beep();
+                            }
                             if (printEnabled) printSimple(res);
 
                             try { IccTester.getInstance().close((byte)0); } catch (Exception ignored) {}
@@ -439,7 +472,8 @@ public class ReaderActivity extends AppCompatActivity {
         try {
             IPrinter printer = NeptuneLiteUser.getInstance().getDal(getApplicationContext()).getPrinter();
             printer.init();
-            printer.printStr("\n\nObrigado por Comprar no Mercado da Bia. Volte Sempre! \n\n" + text + "\n\n", null);
+            String header = ReaderActivity.this.getString(R.string.reader_receipt_header);
+            printer.printStr("\n\n" + header + "\n\n" + text + "\n\n\n", null);
             int ret = printer.start();
             if (ret != 0) appendLine("Erro na impressão. Código: " + ret);
             else appendLine("Impressão concluída com sucesso.");
@@ -506,5 +540,24 @@ public class ReaderActivity extends AppCompatActivity {
 
         // 3) Feedback leve no log
         appendLine("Não foi possível abrir a calculadora neste dispositivo.");
+    }
+
+    private void openTextPad() {
+        try {
+            Intent intent = new Intent(ReaderActivity.this, TextPadActivity.class);
+            startActivity(intent);
+        } catch (Throwable t) {
+            appendLine("Não foi possível abrir o bloco de texto.");
+        }
+    }
+
+    private void openCamera() {
+        try {
+            Intent intent = new Intent(ReaderActivity.this, CameraActivity.class);
+            intent.putExtra(CameraActivity.EXTRA_DIRECT_FRONT_SCAN, true);
+            startActivity(intent);
+        } catch (Throwable t) {
+            appendLine("Não foi possível abrir a câmera.");
+        }
     }
 }

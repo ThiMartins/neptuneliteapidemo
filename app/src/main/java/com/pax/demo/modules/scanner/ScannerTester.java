@@ -15,6 +15,7 @@ import com.pax.demo.util.BaseTester;
 import java.io.FileOutputStream;
 
 public class ScannerTester extends BaseTester {
+    public static final int MSG_SCAN_FINISHED = 1;
     private static ScannerTester cameraTester;
 
     private static EScannerType scannerType;
@@ -57,16 +58,25 @@ public class ScannerTester extends BaseTester {
             public void onFinish() {
                 logTrue("onFinish");
                 close();
+                notifyFinished(handler);
             }
 
             @Override
             public void onCancel() {
                 logTrue("onCancel");
                 close();
+                notifyFinished(handler);
             }
         });
 
         logTrue("start");
+    }
+
+    private void notifyFinished(Handler handler) {
+        if (handler == null) {
+            return;
+        }
+        handler.sendEmptyMessage(MSG_SCAN_FINISHED);
     }
 
     public void close() {
