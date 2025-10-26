@@ -10,7 +10,7 @@
         android:id="@+id/tv_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Mercadinho da Bia"
+        android:text="@string/reader_title"
         android:textSize="20sp"
         android:textStyle="bold"
         android:textColor="@android:color/black"
@@ -23,8 +23,10 @@
         android:id="@+id/btn_start"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Iniciar Tudo"
+        android:minHeight="64dp"
+        android:text="@string/reader_start_open"
         android:textStyle="bold"
+        android:textSize="18sp"
         android:textAllCaps="false"
         android:layout_below="@id/tv_title"
         android:layout_marginBottom="8dp" />
@@ -34,10 +36,24 @@
         android:id="@+id/btn_calc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Calculadora"
+        android:minHeight="72dp"
+        android:text="@string/reader_calc_label"
         android:textAllCaps="false"
+        android:textSize="20sp"
         android:background="@android:color/holo_orange_light"
         android:layout_below="@id/btn_start"
+        android:layout_marginBottom="8dp" />
+
+    <Button
+        android:id="@+id/btn_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="72dp"
+        android:text="@string/reader_text_pad_label"
+        android:textAllCaps="false"
+        android:textSize="20sp"
+        android:background="@android:color/holo_blue_bright"
+        android:layout_below="@id/btn_calc"
         android:layout_marginBottom="8dp" />
 
     <!-- Área de resultados com rolagem -->
@@ -45,7 +61,7 @@
         android:id="@+id/scroll_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/btn_calc"
+        android:layout_below="@id/btn_text"
         android:layout_above="@+id/controls_footer"
         android:fillViewport="true"
         android:paddingTop="8dp">
